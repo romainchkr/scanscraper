@@ -1,2 +1,2 @@
 # scanscraper
-Get any scan from japscan website
+Get any scan from [www.scan-vf.net/](https://www.scan-vf.net/) website

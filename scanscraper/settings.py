@@ -62,9 +62,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'scanscraper.pipelines.ScanscraperPipeline': 300,
-#}
+ITEM_PIPELINES = {'scanscraper.pipelines.customImagePipeline': 1}
+IMAGES_STORE = 'tmp/'
+MEDIA_ALLOW_REDIRECTS = True
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
