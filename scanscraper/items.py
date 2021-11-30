@@ -6,7 +6,8 @@
 import scrapy
 
 
-class ScanscraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ChapterItem(scrapy.Item):
+    image_urls = scrapy.Field()
+    images = scrapy.Field()
+    manga_name = scrapy.Field()
+    chapter = scrapy.Field()

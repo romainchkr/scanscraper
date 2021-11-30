@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {'scanscraper.pipelines.customImagePipeline': 1}
-IMAGES_STORE = 'tmp/'
+IMAGES_STORE = 'scans/'
 MEDIA_ALLOW_REDIRECTS = True
 
 
