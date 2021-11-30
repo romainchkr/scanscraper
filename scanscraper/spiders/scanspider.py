@@ -30,8 +30,8 @@ class ScanSpider(scrapy.Spider):
         
         self.output[manga_name] = []
 
-        #chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li/h5/a/@href')
-        chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li[1]/h5/a/@href')
+        chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li/h5/a/@href')
+        #chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li[1]/h5/a/@href')
 
         for chapter in chapters:
             logging.debug(chapter.get())

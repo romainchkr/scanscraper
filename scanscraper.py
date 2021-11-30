@@ -25,28 +25,28 @@ def create_pdf(url):
     # get png and jpg downloaded files
     files = os.listdir(url)
     files.sort()
-    files = [file for file in files if '.jpg' in file or '.png' in file]
+    files = [url + file for file in files if '.jpg' in file or '.png' in file]
 
     if len(files) > 0:
-        image1 = Image.open(url + files[0])
-        for filename in files[1:]:
-            imageList.append(Image.open(url + filename).convert('RGB'))
+        image1 = Image.open(files[0])
+        for file in files[1:]:
+            imageList.append(Image.open(file).convert('RGB'))
         
-        image1.save(url + url.split('/')[-2] + '.pdf',save_all=True, append_images=imageList)
+        image1.save(url + url.split('/')[-2] + '.pdf', save_all=True, append_images=imageList)
 
         delete_img(files)
 
 def delete_img(files):
-    pass
+    for file in files:
+        os.remove(file)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     start_urls = ["https://www.scan-vf.net/solo-leveling", 'https://www.scan-vf.net/black-clover']
 
     crawler = MyStaticCrawler()
     crawler.crawl(scanspider.ScanSpider, start_urls)
     data = crawler.output
-    logging.debug(data)
 
     for manga_name, chapters in data.items():
         for chapter in chapters:
