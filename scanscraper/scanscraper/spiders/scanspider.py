@@ -12,7 +12,7 @@ import json
 class ScanSpider(scrapy.Spider):
     name = "scan"
     output = {}
-    start_urls = ["https://www.scan-vf.net/solo-leveling"]
+    start_urls = []
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -7,4 +7,5 @@ from scrapy.pipelines.images import ImagesPipeline
 
 class customImagePipeline(ImagesPipeline):
     def file_path(self, request, response=None, info=None, *, item=None):
+        print(item['manga_name'] + '/' + item['chapter'] + '/' + request.url.split('/')[-1])
         return item['manga_name'] + '/' + item['chapter'] + '/' + request.url.split('/')[-1]

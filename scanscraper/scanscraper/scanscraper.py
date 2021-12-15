@@ -2,6 +2,7 @@ import logging
 from scrapy.crawler import CrawlerProcess
 from scanscraper.spiders import scanspider
 from scrapy.utils.project import get_project_settings
+from scrapy.settings import Settings
 
 from urllib.parse import urljoin
 import os
@@ -11,7 +12,10 @@ class MyStaticCrawler:
 
     def __init__(self):
         self.output = None
-        self.process = CrawlerProcess(get_project_settings())
+        settings = Settings()
+        settings.setmodule('scanscraper.settings', priority='project')
+        self.process = CrawlerProcess(settings)
+        print(get_project_settings())
 
     def yield_output(self, data):
         self.output = data
@@ -23,27 +27,27 @@ class MyStaticCrawler:
 def create_pdf(url):
     imageList = []
     # get png and jpg downloaded files
-    files = os.listdir(url)
-    files.sort()
-    files = [url + file for file in files if '.jpg' in file or '.png' in file]
+    if os.path.exists(url) :
+        files = os.listdir(url)
+        files.sort()
+        files = [url + file for file in files if '.jpg' in file or '.png' in file]
 
-    if len(files) > 0:
-        image1 = Image.open(files[0])
-        for file in files[1:]:
-            imageList.append(Image.open(file).convert('RGB'))
-        
-        image1.save(url + url.split('/')[-2] + '.pdf', save_all=True, append_images=imageList)
+        if len(files) > 0:
+            image1 = Image.open(files[0])
+            for file in files[1:]:
+                imageList.append(Image.open(file).convert('RGB'))
+            
+            image1.save(url + url.split('/')[-2] + '.pdf', save_all=True, append_images=imageList)
 
-        delete_img(files)
+            delete_img(files)
+    else :
+        logging.info("Couldn't create PDF. link <%s> is not valid", url)
 
 def delete_img(files):
     for file in files:
         os.remove(file)
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    start_urls = ["https://www.scan-vf.net/solo-leveling", 'https://www.scan-vf.net/black-clover']
-
+def scrape(start_urls):
     crawler = MyStaticCrawler()
     crawler.crawl(scanspider.ScanSpider, start_urls)
     data = crawler.output
