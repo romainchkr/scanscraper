@@ -1,5 +1,5 @@
 import scrapy
-from  scanscraper.items import ChapterItem
+from  scraper.items import ChapterItem
 
 import logging
 import os

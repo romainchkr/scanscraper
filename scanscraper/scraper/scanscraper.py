@@ -1,7 +1,6 @@
 import logging
 from scrapy.crawler import CrawlerProcess
-from scanscraper.spiders import scanspider
-from scrapy.utils.project import get_project_settings
+from scraper.spiders import scanspider
 from scrapy.settings import Settings
 
 from urllib.parse import urljoin
@@ -13,9 +12,8 @@ class MyStaticCrawler:
     def __init__(self):
         self.output = None
         settings = Settings()
-        settings.setmodule('scanscraper.settings', priority='project')
+        settings.setmodule('scraper.settings', priority='project')
         self.process = CrawlerProcess(settings)
-        print(get_project_settings())
 
     def yield_output(self, data):
         self.output = data

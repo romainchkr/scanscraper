@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 import logging
-from scanscraper.scanscraper import scrape
+from scraper.scanscraper import scrape
 
 logging.basicConfig(level=logging.DEBUG)
 
