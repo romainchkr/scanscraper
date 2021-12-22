@@ -5,7 +5,7 @@ from scraper.scanscraper import scrape
 
 MAX_CHAPTER_NUMBER = 1999
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 #launch : python scanscraper --link https://www.scan-vf.net/solo-leveling
 def main():
@@ -41,7 +41,7 @@ def main():
                 except TypeError:
                     parser.error(f"chapters must be positive integers {min}-{max}")
                 except ValueError:
-                    parser.error(f"bad boundaries for the chapter range {min}-{max}")
+                    parser.error(f"bad boundaries for the chapter range {numbers[0]}-{numbers[1]}")
                 except:
                     parser.error("chapter range must contain integers")
             else:
