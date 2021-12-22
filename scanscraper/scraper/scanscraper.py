@@ -18,8 +18,8 @@ class MyStaticCrawler:
     def yield_output(self, data):
         self.output = data
 
-    def crawl(self, cls, urls):
-        self.process.crawl(cls, start_urls=urls, args={'callback': self.yield_output})
+    def crawl(self, cls, urls, chapters):
+        self.process.crawl(cls, start_urls=urls, args={'callback': self.yield_output, 'chapters': chapters})
         self.process.start()
 
 def create_pdf(url):
@@ -45,9 +45,9 @@ def delete_img(files):
     for file in files:
         os.remove(file)
 
-def scrape(start_urls):
+def scrape(start_urls, chapters):
     crawler = MyStaticCrawler()
-    crawler.crawl(scanspider.ScanSpider, start_urls)
+    crawler.crawl(scanspider.ScanSpider, start_urls, chapters)
     data = crawler.output
 
     for manga_name, chapters in data.items():
