@@ -1,20 +1,18 @@
 from argparse import ArgumentParser
-import argparse
-import logging
 from scraper.scanscraper import scrape
 
-MAX_CHAPTER_NUMBER = 1999
+import logging
 
-logging.basicConfig(level=logging.INFO)
+MAX_CHAPTER_NUMBER = 1999
 
 #launch : python scanscraper --link https://www.scan-vf.net/solo-leveling
 def main():
     parser = ArgumentParser(prog='scanscraper', description='Command line interface for the scanscraper app')
 
     parser.add_argument('-l', '--link', type=str, nargs='+', required=True, help="<Required> Link if the scans to scrape")   
-    parser.add_argument('-c', '--chapter', nargs='+', help="chapters to scrape", default=['0-'])
+    parser.add_argument('-c', '--chapter', nargs='+', default=['0-'], help="Chapters to scrape")
+    parser.add_argument('-L', '--loglevel', type=str, default="WARNING", choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'], help="Log level of the scraper")
     args = parser.parse_args()
-    print(args)
 
     #parse chapter
     chapters = []
@@ -52,7 +50,6 @@ def main():
             except:
                 parser.error("chapter type must be positive integers") 
             
-
     #remove duplicate chapters
     chapters = list(dict.fromkeys(chapters))
-    scrape(args.link, chapters)
+    scrape(args.link, chapters, args.loglevel)

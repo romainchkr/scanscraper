@@ -1,8 +1,8 @@
-import logging
 from scrapy.crawler import CrawlerProcess
 from scraper.spiders import scanspider
 from scrapy.settings import Settings
 
+import logging
 from urllib.parse import urljoin
 import os
 from PIL import Image
@@ -13,6 +13,7 @@ class MyStaticCrawler:
         self.output = None
         settings = Settings()
         settings.setmodule('scraper.settings', priority='project')
+        settings.set("LOG_LEVEL", logging.getLogger().level)
         self.process = CrawlerProcess(settings)
 
     def yield_output(self, data):
@@ -39,13 +40,15 @@ def create_pdf(url):
 
             delete_img(files)
     else :
-        logging.info("Couldn't create PDF. link <%s> is not valid", url)
+        logging.warning("Couldn't create PDF. link <%s> is not valid", url)
 
 def delete_img(files):
     for file in files:
         os.remove(file)
 
-def scrape(start_urls, chapters):
+def scrape(start_urls, chapters, loglevel):
+    logging.getLogger().setLevel(loglevel) 
+
     crawler = MyStaticCrawler()
     crawler.crawl(scanspider.ScanSpider, start_urls, chapters)
     data = crawler.output
