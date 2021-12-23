@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from scraper.scanscraper import scrape
 
-import logging
+import requests
 
 MAX_CHAPTER_NUMBER = 1999
 
@@ -10,9 +10,17 @@ def main():
     parser = ArgumentParser(prog='scanscraper', description='Command line interface for the scanscraper app')
 
     parser.add_argument('-l', '--link', type=str, nargs='+', required=True, help="<Required> Link if the scans to scrape")   
-    parser.add_argument('-c', '--chapter', nargs='+', default=['0-'], help="Chapters to scrape")
+    parser.add_argument('-c', '--chapter', nargs='+', default=['0-*'], help="Chapters to scrape")
     parser.add_argument('-L', '--loglevel', type=str, default="WARNING", choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'], help="Log level of the scraper")
     args = parser.parse_args()
+
+    #parse link
+    for link in args.link:
+        if not 'https://www.scan-vf.net/' in link:
+            parser.error(f"{link} is incorrect. links must come from www.scan-vf.net website")
+        r = requests.get(link)
+        if r.status_code != 200:
+            parser.error(f"can't access to {link}. Status response is {r.status_code}")
 
     #parse chapter
     chapters = []
