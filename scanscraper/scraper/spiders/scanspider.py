@@ -1,7 +1,6 @@
 import scrapy
-from  scanscraper.items import ChapterItem
+from  scraper.items import ChapterItem
 
-import logging
 import os
 import re
 import json
@@ -12,33 +11,37 @@ import json
 class ScanSpider(scrapy.Spider):
     name = "scan"
     output = {}
-    start_urls = ["https://www.scan-vf.net/solo-leveling"]
+    start_urls = []
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.output_callback = kwargs.get('args').get('callback')
+        self.chapters = kwargs.get('args').get('chapters')
     
     def close(self, spider, reason):
         self.output_callback(self.output)
 
     def parse(self, response):
-        logging.info("Start scraping")
-
+        self.logger.info("Start scraping")
         manga_name = response.xpath('/html/body/div[1]/div/div[1]/div/h2/text()').get()
         if not os.path.exists("scans\\"+manga_name):
             os.makedirs("scans\\"+manga_name)
         
         self.output[manga_name] = []
 
-        chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li/h5/a/@href')
-        #chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li[1]/h5/a/@href')
+        all_chapters = response.xpath('/html/body/div[1]/div/div[1]/div/div[4]/div/ul/li/h5/a/@href')
+
+        if self.chapters:
+            chapters = [chapter.get() for chapter in all_chapters if int(chapter.get()[len(chapter.get())-chapter.get()[::-1].index('-'):]) in self.chapters]
+        else:
+            chapters = [chapter.get() for chapter in all_chapters]
 
         for chapter in chapters:
-            logging.debug(chapter.get())
-            yield scrapy.Request(chapter.get(), callback=self.parse_chapter, meta={'manga_name': manga_name})
+            self.logger.debug(chapter)
+            yield scrapy.Request(chapter, callback=self.parse_chapter, meta={'manga_name': manga_name})
     
     def parse_chapter(self, response):
-        logging.debug("parse_chapter")
+        self.logger.debug("parse_chapter")
 
         images = re.search(r'var pages = \[.+\]',response.xpath("//script[contains(., 'var pages')]/text()").get()).group(0)
         image_obj = json.loads(images[images.index('['):])

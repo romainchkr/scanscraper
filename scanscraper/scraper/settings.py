@@ -9,8 +9,8 @@
 
 BOT_NAME = 'scanscraper'
 
-SPIDER_MODULES = ['scanscraper.spiders']
-NEWSPIDER_MODULE = 'scanscraper.spiders'
+SPIDER_MODULES = ['scraper.spiders']
+NEWSPIDER_MODULE = 'scraper.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -62,10 +62,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {'scanscraper.pipelines.customImagePipeline': 1}
-IMAGES_STORE = 'scans/'
+ITEM_PIPELINES = {'scraper.pipelines.customImagePipeline': 1}
+IMAGES_STORE = 'scans'
 MEDIA_ALLOW_REDIRECTS = True
-
+DUPEFILTER_CLASS = 'scrapy.dupefilters.BaseDupeFilter' 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
